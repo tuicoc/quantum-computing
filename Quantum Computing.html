@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quantum Computing in Business</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Courier New', monospace;
+      background: #000;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    .scanline {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+              transparent 50%,
+              rgba(255, 255, 255, 0.02) 50%
+      );
+      background-size: 100% 4px;
+      pointer-events: none;
+      z-index: 9999;
+      animation: scanline 8s linear infinite;
+    }
+
+    @keyframes scanline {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(100%); }
+    }
+
+    .grain {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" /></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.05"/></svg>');
+      pointer-events: none;
+      z-index: 9998;
+      opacity: 0.3;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    section {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 40px;
+      position: relative;
+      border-bottom: 1px solid #333;
+    }
+
+    .hero {
+      text-align: center;
+      position: relative;
+      padding: 120px 40px;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: pulse 4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+      50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.3; }
+    }
+
+    h1 {
+      font-size: 4.5em;
+      margin-bottom: 20px;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      position: relative;
+      animation: glitch 3s infinite;
+    }
+
+    @keyframes glitch {
+      0%, 90%, 100% { transform: translate(0); }
+      92% { transform: translate(-2px, 2px); }
+      94% { transform: translate(2px, -2px); }
+      96% { transform: translate(-2px, -2px); }
+    }
+
+    h2 {
+      font-size: 3em;
+      margin-bottom: 40px;
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border-left: 5px solid #fff;
+      padding-left: 30px;
+      animation: slideIn 0.8s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    h3 {
+      font-size: 1.8em;
+      margin: 30px 0 15px;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.9;
+    }
+
+    .subtitle {
+      font-size: 1.8em;
+      margin-bottom: 40px;
+      opacity: 0.7;
+      letter-spacing: 0.05em;
+      font-weight: 300;
+    }
+
+    .team {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 30px;
+      margin-top: 60px;
+      position: relative;
+    }
+
+    .team-member {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 30px 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .team-member::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .team-member:hover::before {
+      left: 100%;
+    }
+
+    .team-member:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: #fff;
+      transform: translateY(-5px);
+    }
+
+    .content-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 60px;
+      margin: 40px 0;
+      position: relative;
+    }
+
+    .content-box::before,
+    .content-box::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #fff;
+    }
+
+    .content-box::before {
+      top: -1px;
+      left: -1px;
+      border-right: none;
+      border-bottom: none;
+    }
+
+    .content-box::after {
+      bottom: -1px;
+      right: -1px;
+      border-left: none;
+      border-top: none;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin: 40px 0;
+    }
+
+    .card {
+      background: rgba(0, 0, 0, 0.5);
+      padding: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 2px;
+      background: #fff;
+      transition: left 0.4s ease;
+    }
+
+    .card:hover::before {
+      left: 100%;
+    }
+
+    .card:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: #fff;
+      transform: translateX(10px);
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    li {
+      padding: 12px 0;
+      padding-left: 40px;
+      position: relative;
+      line-height: 1.8;
+      font-size: 1.05em;
+      opacity: 0.9;
+    }
+
+    li:before {
+      content: "▶";
+      position: absolute;
+      left: 0;
+      font-size: 0.7em;
+      opacity: 0.7;
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 40px 0;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+      padding: 20px;
+      text-align: left;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 1.05em;
+    }
+
+    .comparison-table th {
+      background: rgba(255, 255, 255, 0.05);
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .comparison-table tr:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .highlight {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 5px 15px;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+    }
+
+    .timeline {
+      position: relative;
+      padding: 40px 0;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .timeline-item {
+      background: rgba(0, 0, 0, 0.5);
+      padding: 30px;
+      margin: 30px 0;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-left: 4px solid #fff;
+      margin-left: 40px;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -48px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 12px;
+      height: 12px;
+      background: #fff;
+      border: 3px solid #000;
+    }
+
+    .timeline-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+      margin-left: 50px;
+    }
+
+    .kahoot-section {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid #fff;
+      padding: 100px 60px;
+      margin: 60px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kahoot-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: repeating-linear-gradient(
+              0deg,
+              transparent,
+              transparent 10px,
+              rgba(255, 255, 255, 0.03) 10px,
+              rgba(255, 255, 255, 0.03) 20px
+      );
+      animation: moveLines 20s linear infinite;
+    }
+
+    @keyframes moveLines {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(20px); }
+    }
+
+    .kahoot-section h2 {
+      border: none;
+      padding: 0;
+      margin-bottom: 30px;
+    }
+
+    .kahoot-input-container {
+      max-width: 600px;
+      margin: 40px auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .kahoot-input {
+      width: 100%;
+      padding: 20px;
+      font-size: 1.2em;
+      background: rgba(0, 0, 0, 0.7);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      color: #fff;
+      font-family: 'Courier New', monospace;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .kahoot-input:focus {
+      outline: none;
+      border-color: #fff;
+      background: rgba(0, 0, 0, 0.9);
+    }
+
+    .kahoot-input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .kahoot-btn {
+      display: inline-block;
+      padding: 25px 80px;
+      font-size: 1.5em;
+      background: #fff;
+      color: #000;
+      text-decoration: none;
+      font-weight: 400;
+      transition: all 0.3s ease;
+      margin-top: 30px;
+      position: relative;
+      overflow: hidden;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: 2px solid #fff;
+      font-family: 'Courier New', monospace;
+      cursor: pointer;
+      z-index: 1;
+    }
+
+    .kahoot-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: #000;
+      transition: all 0.5s ease;
+      transform: translate(-50%, -50%);
+      z-index: -1;
+    }
+
+    .kahoot-btn:hover::before {
+      width: 100%;
+      height: 100%;
+    }
+
+    .kahoot-btn:hover {
+      color: #fff;
+      transform: scale(1.05);
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: #fff;
+      width: 0%;
+      z-index: 10000;
+      transition: width 0.1s ease;
+    }
+
+    .chapter-number {
+      font-size: 6em;
+      opacity: 0.1;
+      position: absolute;
+      right: 40px;
+      top: 40px;
+      font-weight: 700;
+    }
+
+    p {
+      line-height: 1.8;
+      opacity: 0.9;
+      font-size: 1.05em;
+      margin: 20px 0;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.5em;
+      }
+      h2 {
+        font-size: 2em;
+      }
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+      .team {
+        grid-template-columns: 1fr;
+      }
+      section {
+        padding: 60px 20px;
+      }
+      .content-box {
+        padding: 30px;
+      }
+    }
+
+    .vignette {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      box-shadow: inset 0 0 200px rgba(0,0,0,0.9);
+      pointer-events: none;
+      z-index: 9997;
+    }
+  </style>
+</head>
+<body>
+<div class="scanline"></div>
+<div class="grain"></div>
+<div class="vignette"></div>
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="container">
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="chapter-number">00</div>
+    <h1>QUANTUM COMPUTING</h1>
+    <p class="subtitle">IN BUSINESS</p>
+    <p style="font-size: 1.3em; margin-top: 30px; letter-spacing: 0.05em; opacity: 0.7;">FROM THEORY TO REAL-WORLD APPLICATIONS</p>
+    <p style="font-size: 1.1em; margin-top: 40px; opacity: 0.6;">DIGITAL TECHNOLOGY IN BUSINESS COURSE</p>
+
+    <div class="team">
+      <div class="team-member">
+        <p style="font-size: 1.1em;"><strong>MEMBER 1</strong></p>
+        <p style="opacity: 0.7; margin-top: 10px;">20%</p>
+      </div>
+      <div class="team-member">
+        <p style="font-size: 1.1em;"><strong>MEMBER 2</strong></p>
+        <p style="opacity: 0.7; margin-top: 10px;">20%</p>
+      </div>
+      <div class="team-member">
+        <p style="font-size: 1.1em;"><strong>MEMBER 3</strong></p>
+        <p style="opacity: 0.7; margin-top: 10px;">20%</p>
+      </div>
+      <div class="team-member">
+        <p style="font-size: 1.1em;"><strong>MEMBER 4</strong></p>
+        <p style="opacity: 0.7; margin-top: 10px;">20%</p>
+      </div>
+      <div class="team-member">
+        <p style="font-size: 1.1em;"><strong>MEMBER 5</strong></p>
+        <p style="opacity: 0.7; margin-top: 10px;">20%</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Introduction -->
+  <section>
+    <div class="chapter-number">01</div>
+    <div class="content-box">
+      <h2>WHAT IS QUANTUM COMPUTING?</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>CLASSICAL COMPUTING</h3>
+          <ul>
+            <li>Uses bits (0 or 1)</li>
+            <li>Sequential or parallel processing</li>
+            <li>Limited by Moore's Law</li>
+            <li>Approaching physical limits</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>QUANTUM COMPUTING</h3>
+          <ul>
+            <li>Uses qubits (0, 1, or both)</li>
+            <li>Exponential parallel processing</li>
+            <li>Leverages quantum mechanics</li>
+            <li>Solves complex problems faster</li>
+          </ul>
+        </div>
+      </div>
+      <p style="margin-top: 50px; font-size: 1.3em; text-align: center; letter-spacing: 0.05em;">
+        TASKS TAKING <span class="highlight">CENTURIES</span> ON CLASSICAL COMPUTERS<br>
+        CAN BE SOLVED IN <span class="highlight">MINUTES OR HOURS</span> WITH QUANTUM COMPUTING
+      </p>
+    </div>
+  </section>
+
+  <!-- Tech Deep Dive -->
+  <section>
+    <div class="chapter-number">02</div>
+    <div class="content-box">
+      <h2>TECHNOLOGY DEEP DIVE</h2>
+
+      <h3>1. ENTANGLEMENT - BEYOND SPACE CONNECTION</h3>
+      <p>Qubits can be linked through quantum entanglement, where the state of one qubit directly depends on another, regardless of distance.</p>
+      <ul>
+        <li>A system of n qubits can represent <span class="highlight">2^n STATES</span> simultaneously</li>
+        <li>Combined with superposition, enables exponential parallel processing</li>
+        <li>Essential for molecular simulation, optimization, and quantum equation solving</li>
+        <li>Highly sensitive to decoherence - requires <span class="highlight">ULTRA-LOW TEMPERATURES (&lt;15mK)</span></li>
+      </ul>
+
+      <h3 style="margin-top: 60px;">2. QUANTUM TUNNELING - ENERGY BARRIER BREAKTHROUGH</h3>
+      <p>Allows quantum particles to penetrate energy barriers without classical energy requirements.</p>
+      <ul>
+        <li>Foundation of superconducting qubits (used by Google, IBM, Rigetti)</li>
+        <li>Enables fast, stable, and energy-efficient state transitions</li>
+        <li>Creates quantized energy states through Josephson junctions</li>
+        <li>Dominant architecture for scalable quantum systems</li>
+      </ul>
+
+      <h3 style="margin-top: 60px;">3. MAJOR CHALLENGES</h3>
+      <div class="grid-2" style="margin-top: 30px;">
+        <div class="card">
+          <h3>DECOHERENCE</h3>
+          <p>Quantum states lose superposition when interacting with environment</p>
+          <ul>
+            <li>Electromagnetic noise</li>
+            <li>Thermal fluctuations</li>
+            <li>Qubit correlation errors</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>CRYOGENIC ENVIRONMENT</h3>
+          <p>Requires extreme cooling systems</p>
+          <ul>
+            <li>~15 millikelvin operation</li>
+            <li>Dilution refrigerators needed</li>
+            <li>Expensive and complex</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Current Capability -->
+  <section>
+    <div class="chapter-number">03</div>
+    <div class="content-box">
+      <h2>CURRENT QUANTUM COMPUTING CAPABILITY</h2>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <h3>2019 - GOOGLE SYCAMORE</h3>
+          <p>53 physical qubits achieved quantum supremacy: solved a specialized problem in ~200 seconds that would take classical supercomputers ~10,000 years</p>
+        </div>
+        <div class="timeline-item">
+          <h3>2023 - IBM CONDOR</h3>
+          <p>1,121 physical qubits - but usable logical qubits remain low due to noise and decoherence</p>
+        </div>
+        <div class="timeline-item">
+          <h3>CURRENT STATE: NISQ ERA</h3>
+          <p>Noisy Intermediate-Scale Quantum - devices with noise, unable to handle large-scale problems</p>
+        </div>
+      </div>
+
+      <h3 style="margin-top: 60px;">WHY 20 MILLION QUBITS TO BREAK RSA-2048?</h3>
+      <table class="comparison-table">
+        <tr>
+          <th>COMPONENT</th>
+          <th>REQUIREMENT</th>
+        </tr>
+        <tr>
+          <td>Logical Qubits Needed</td>
+          <td>~4,000 (with error correction)</td>
+        </tr>
+        <tr>
+          <td>Physical Qubits per Logical Qubit</td>
+          <td>~5,000 (using surface code)</td>
+        </tr>
+        <tr>
+          <td>Total Physical Qubits</td>
+          <td><span class="highlight">~20 MILLION</span></td>
+        </tr>
+        <tr>
+          <td>Time to Break RSA-2048</td>
+          <td>~8 hours</td>
+        </tr>
+      </table>
+
+      <p style="margin-top: 50px; font-size: 1.2em; text-align: center; letter-spacing: 0.05em;">
+        GAP: <span class="highlight">50 CURRENT QUBITS → 20 MILLION NEEDED</span><br>
+        <span style="opacity: 0.7; font-size: 0.9em;">RSA encryption remains safe in the near term, but transition to post-quantum cryptography is underway</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- Moore's Law Comparison -->
+  <section>
+    <div class="chapter-number">04</div>
+    <div class="content-box">
+      <h2>CLASSICAL VS QUANTUM COMPUTING EVOLUTION</h2>
+
+      <h3>MOORE'S LAW: THE CLASSICAL LIMIT</h3>
+      <p>Transistor count doubles every 18-24 months, but approaching physical limits since mid-2010s</p>
+      <ul>
+        <li>Electron leakage</li>
+        <li>Heat generation</li>
+        <li>Manufacturing costs</li>
+        <li>Approaching atomic-scale limits</li>
+      </ul>
+
+      <h3 style="margin-top: 60px;">QUANTUM GROWTH TRAJECTORY</h3>
+      <p>Non-linear growth across multiple dimensions</p>
+
+      <table class="comparison-table" style="margin-top: 40px;">
+        <tr>
+          <th>ASPECT</th>
+          <th>CLASSICAL COMPUTING</th>
+          <th>QUANTUM COMPUTING</th>
+        </tr>
+        <tr>
+          <td>Growth Mechanism</td>
+          <td>Predictable transistor increase</td>
+          <td>Non-linear, multi-factor improvement</td>
+        </tr>
+        <tr>
+          <td>Current State</td>
+          <td>Near physical saturation</td>
+          <td>Rapidly increasing (qubits, fidelity, volume)</td>
+        </tr>
+        <tr>
+          <td>Hardware Innovation Speed</td>
+          <td>Slowing down</td>
+          <td>Accelerating across multiple fronts</td>
+        </tr>
+        <tr>
+          <td>Performance Advantage</td>
+          <td>Stable, widespread applications</td>
+          <td>Superior only for specialized problems</td>
+        </tr>
+      </table>
+
+      <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.3); padding: 40px; margin-top: 60px;">
+        <h3>FROM SUPREMACY TO UTILITY</h3>
+        <p style="font-size: 1.1em; margin-top: 20px;"><strong>QUANTUM SUPREMACY (2019):</strong> Solving one specialized problem faster than classical computers</p>
+        <p style="font-size: 1.1em; margin-top: 20px;"><strong>QUANTUM UTILITY (GOAL):</strong> Solving real-world problems like molecular simulation, optimization, RSA breaking</p>
+        <p style="font-size: 1.1em; margin-top: 20px;">Requires: Millions of physical qubits + effective error correction + fault-tolerant algorithms + stable large-scale systems</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Business Case: Volkswagen -->
+  <section>
+    <div class="chapter-number">05</div>
+    <div class="content-box">
+      <h2>BUSINESS CASE: VOLKSWAGEN</h2>
+      <h3 style="text-align: center; font-size: 2em; margin-bottom: 40px; opacity: 0.8;">QUANTUM TRAFFIC OPTIMIZATION</h3>
+
+      <h3>PROJECT OVERVIEW</h3>
+      <div class="grid-2">
+        <div class="card">
+          <h3>2017 - BEIJING PILOT</h3>
+          <p>Analyzed GPS data from 10,000 taxis using quantum algorithms to optimize city-wide traffic flow</p>
+        </div>
+        <div class="card">
+          <h3>2019 - LISBON QUANTUM SHUTTLE</h3>
+          <p>First live implementation at Web Summit - 9 shuttle buses with routes optimized every 2 minutes</p>
+        </div>
+      </div>
+
+      <h3 style="margin-top: 60px;">BUSINESS IMPACT</h3>
+      <ul>
+        <li><strong>REDUCED TRAVEL TIME:</strong> Dynamic routing minimized delays and improved punctuality</li>
+        <li><strong>OPERATIONAL EFFICIENCY:</strong> Better fleet distribution, reduced idle capacity</li>
+        <li><strong>CONGESTION RELIEF:</strong> Distributed vehicles across multiple efficient paths</li>
+        <li><strong>ENVIRONMENTAL BENEFITS:</strong> Smoother traffic flow → lower emissions</li>
+        <li><strong>BRAND ENHANCEMENT:</strong> Positioned VW as quantum innovation leader</li>
+      </ul>
+
+      <h3 style="margin-top: 60px;">IMPLEMENTATION CHALLENGES</h3>
+      <div class="grid-2" style="margin-top: 30px;">
+        <div class="card">
+          <h3>TECHNICAL LIMITATIONS</h3>
+          <ul>
+            <li>Limited qubits and connectivity</li>
+            <li>Required hybrid classical-quantum architecture</li>
+            <li>Real-time data quality issues</li>
+            <li>System integration complexity</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>BUSINESS CHALLENGES</h3>
+          <ul>
+            <li>High costs of quantum computing access</li>
+            <li>Difficulty scaling beyond pilot programs</li>
+            <li>Need for clear ROI demonstration</li>
+            <li>Unpredictable events (accidents, closures)</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3 style="margin-top: 60px;">SUCCESS FACTORS</h3>
+      <ul>
+        <li><strong>HYBRID STRATEGY:</strong> Combined classical and quantum to overcome hardware limits</li>
+        <li><strong>SMALL-SCALE PILOTS:</strong> Controlled environment testing before expansion</li>
+        <li><strong>CROSS-SECTOR COLLABORATION:</strong> D-Wave (hardware), Hexad (app), PTV Group (traffic modeling), CARRIS (operations)</li>
+        <li><strong>CONTINUOUS OPTIMIZATION:</strong> 2-minute route recalculations, exclusion zones for narrow streets</li>
+        <li><strong>LONG-TERM VISION:</strong> Integrated into broader smart mobility and MaaS strategy</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Comparison: International vs Vietnam -->
+  <section>
+    <div class="chapter-number">06</div>
+    <div class="content-box">
+      <h2>BUSINESS CASE COMPARISON</h2>
+      <h3 style="text-align: center; font-size: 1.8em; margin-bottom: 40px; opacity: 0.8;">VOLKSWAGEN VS V-QUANTUM</h3>
+
+      <table class="comparison-table">
+        <tr>
+          <th>ASPECT</th>
+          <th>VOLKSWAGEN (INTERNATIONAL)</th>
+          <th>V-QUANTUM (VIETNAM)</th>
+        </tr>
+        <tr>
+          <td><strong>BUSINESS MODEL</strong></td>
+          <td>Develop proprietary quantum solutions for internal use (traffic optimization)</td>
+          <td>Bridge model: providing quantum solutions using foreign platforms (D-Wave, IBM, Fujitsu)</td>
+        </tr>
+        <tr>
+          <td><strong>HARDWARE STRATEGY</strong></td>
+          <td>Partners with D-Wave, uses quantum annealers</td>
+          <td>No hardware manufacturing - relies entirely on global cloud platforms</td>
+        </tr>
+        <tr>
+          <td><strong>TARGET APPLICATIONS</strong></td>
+          <td>Traffic optimization, smart mobility, logistics</td>
+          <td>Healthcare (Q-MEDICAL-AI), drug discovery, financial optimization</td>
+        </tr>
+        <tr>
+          <td><strong>IMPLEMENTATION STAGE</strong></td>
+          <td>Live pilot deployments with real users</td>
+          <td>Early stage - algorithm development and training programs</td>
+        </tr>
+        <tr>
+          <td><strong>MARKET MATURITY</strong></td>
+          <td>Mature market, high awareness</td>
+          <td>Emerging market, low awareness, requires education</td>
+        </tr>
+        <tr>
+          <td><strong>WORKFORCE</strong></td>
+          <td>Access to quantum experts and researchers</td>
+          <td>Severe talent shortage - offering training programs (V-QUANTUM BASIC)</td>
+        </tr>
+        <tr>
+          <td><strong>KEY CHALLENGE</strong></td>
+          <td>Scaling from pilot to production, demonstrating ROI</td>
+          <td>Market readiness, dependency on foreign technology, building local expertise</td>
+        </tr>
+      </table>
+
+      <div style="background: rgba(255, 255, 255, 0.08); border: 2px solid rgba(255, 255, 255, 0.3); padding: 50px; margin-top: 60px;">
+        <h3 style="text-align: center; font-size: 2em; margin-bottom: 30px;">KEY INSIGHT</h3>
+        <p style="font-size: 1.2em; margin-top: 20px; text-align: center;"><strong>VOLKSWAGEN:</strong> End-user company applying quantum to solve specific business problems</p>
+        <p style="font-size: 1.2em; margin-top: 20px; text-align: center;"><strong>V-QUANTUM:</strong> Service provider bringing quantum capabilities to Vietnamese market through partnerships</p>
+        <p style="font-size: 1.2em; margin-top: 30px; text-align: center; opacity: 0.9;"><span class="highlight">BOTH DEMONSTRATE:</span> Success requires hybrid approaches, strong partnerships, and long-term strategic vision rather than immediate ROI</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- V-QUANTUM Details -->
+  <section>
+    <div class="chapter-number">07</div>
+    <div class="content-box">
+      <h2>V-QUANTUM: VIETNAM'S QUANTUM PIONEER</h2>
+
+      <h3>SWOT ANALYSIS</h3>
+      <div class="grid-2">
+        <div class="card">
+          <h3 style="opacity: 0.9;">STRENGTHS</h3>
+          <ul>
+            <li>First-mover advantage in Vietnam</li>
+            <li>Flexible business model (no hardware manufacturing)</li>
+            <li>Strong international partnerships</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 style="opacity: 0.9;">WEAKNESSES</h3>
+          <ul>
+            <li>Market not yet mature</li>
+            <li>Severe shortage of qualified workforce</li>
+            <li>Dependent on foreign technology platforms</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 style="opacity: 0.9;">OPPORTUNITIES</h3>
+          <ul>
+            <li>Government push for digital transformation</li>
+            <li>Growing demand for optimization in key industries</li>
+            <li>Potential to become Southeast Asia quantum hub</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 style="opacity: 0.9;">THREATS</h3>
+          <ul>
+            <li>Technology still in development globally</li>
+            <li>High implementation costs</li>
+            <li>Competition from large tech corporations</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3 style="margin-top: 60px;">STRATEGIC APPROACH</h3>
+      <ul>
+        <li><strong>NO HARDWARE MANUFACTURING:</strong> Focus on software and solutions to minimize investment risk</li>
+        <li><strong>SECTOR FOCUS:</strong> Healthcare, finance, logistics optimization</li>
+        <li><strong>TALENT DEVELOPMENT:</strong> Training programs to build local quantum workforce</li>
+        <li><strong>CLOUD-BASED ACCESS:</strong> Leveraging global quantum platforms via cloud</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Future Outlook -->
+  <section>
+    <div class="chapter-number">08</div>
+    <div class="content-box">
+      <h2>FUTURE PROSPECTS & BUSINESS OPPORTUNITIES</h2>
+
+      <h3>MARKET PROJECTIONS (BOSTON CONSULTING GROUP)</h3>
+      <div class="timeline">
+        <div class="timeline-item">
+          <h3>2030</h3>
+          <p>Supplier market (hardware, software, services): <span class="highlight">$1-2 BILLION</span></p>
+        </div>
+        <div class="timeline-item">
+          <h3>2040</h3>
+          <p>End-user value: <span class="highlight">$450-850 BILLION</span> annually (pharma, chemicals, finance, logistics)</p>
+          <p>Supplier market: <span class="highlight">$90-170 BILLION</span></p>
+        </div>
+      </div>
+
+      <h3 style="margin-top: 60px;">MAJOR PLAYER ROADMAPS</h3>
+      <ul>
+        <li><strong>IBM (2026):</strong> Quantum advantage - outperform classical on meaningful tasks</li>
+        <li><strong>IBM (2029):</strong> Fault-tolerant system - 200 logical qubits, 100M gates ("Starling")</li>
+        <li><strong>GOOGLE (~2030):</strong> Commercial applications in materials, energy, drug discovery</li>
+        <li><strong>MICROSOFT:</strong> Topological qubits via Majorana particles for scalable stability</li>
+      </ul>
+
+      <h3 style="margin-top: 60px;">QUANTUM-AS-A-SERVICE (QaaS)</h3>
+      <div class="grid-2">
+        <div class="card">
+          <h3>IBM QUANTUM PLATFORM</h3>
+          <ul>
+            <li>Qiskit & Qiskit Runtime</li>
+            <li>Fault-tolerant by 2029</li>
+            <li>IBM Quantum Safe</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>MICROSOFT AZURE QUANTUM</h3>
+          <ul>
+            <li>Hybrid cloud integration</li>
+            <li>Become "quantum-ready" in 2025</li>
+            <li>Q# programming language</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card" style="margin-top: 30px;">
+        <h3>GOOGLE QUANTUM AI</h3>
+        <ul>
+          <li>Sycamore processor</li>
+          <li>Quantum supremacy achieved 2019</li>
+          <li>Commercial apps within 5 years</li>
+        </ul>
+      </div>
+
+      <h3 style="margin-top: 60px;">HOW BUSINESSES CAN PREPARE</h3>
+      <ul>
+        <li><strong>SKILLS DEVELOPMENT:</strong> Train developers in Qiskit (IBM), Q# (Microsoft), Cirq (Google)</li>
+        <li><strong>PILOT PROJECTS:</strong> Start experimenting with QaaS platforms</li>
+        <li><strong>HYBRID ARCHITECTURE:</strong> Develop systems connecting classical and quantum computing</li>
+        <li><strong>SECURITY TRANSITION:</strong> Begin adopting post-quantum cryptography now</li>
+        <li><strong>STRATEGIC ROADMAP:</strong> Identify relevant use cases, start POCs, collaborate with quantum partners</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Applications -->
+  <section>
+    <div class="chapter-number">09</div>
+    <div class="content-box">
+      <h2>REAL-WORLD APPLICATIONS</h2>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>FINANCIAL SERVICES</h3>
+          <p><strong>Application:</strong> Faster risk analysis and fraud detection in banking</p>
+          <p style="margin-top: 15px;"><strong>Example:</strong> Turkey's Yapi Kredi Bank used D-Wave quantum computers to analyze thousands of business risk scenarios in 7 seconds - what would take classical computers an entire year</p>
+        </div>
+        <div class="card">
+          <h3>CYBERSECURITY</h3>
+          <p><strong>Application:</strong> Protecting personal data from future quantum threats</p>
+          <p style="margin-top: 15px;"><strong>Example:</strong> HSBC tested VPN channels with post-quantum algorithms and QRNG to secure cryptocurrency transactions</p>
+        </div>
+        <div class="card">
+          <h3>ARTIFICIAL INTELLIGENCE</h3>
+          <p><strong>Application:</strong> Enhancing predictive accuracy in complex data analysis</p>
+          <p style="margin-top: 15px;"><strong>Example:</strong> QAmplifyNet predicts inventory backorders with higher accuracy than conventional ML. University of Chicago used QML to distinguish cancer patient exosomes from healthy individuals</p>
+        </div>
+        <div class="card">
+          <h3>ENERGY GRID MANAGEMENT</h3>
+          <p><strong>Application:</strong> Optimizing power generation and renewable energy distribution</p>
+          <p style="margin-top: 15px;"><strong>Example:</strong> IonQ with Oak Ridge National Laboratory used 36-qubit quantum machine to solve "Unit Commitment" problem for power generation scheduling</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Conclusion -->
+  <section>
+    <div class="chapter-number">10</div>
+    <div class="content-box">
+      <h2>KEY TAKEAWAYS</h2>
+
+      <ul style="font-size: 1.15em; line-height: 2;">
+        <li><strong>QUANTUM COMPUTING IS REAL:</strong> From theoretical concept to practical pilots (Google Sycamore, VW Traffic Optimization)</li>
+        <li><strong>HYBRID APPROACH IS KEY:</strong> Combining classical and quantum computing overcomes current hardware limitations</li>
+        <li><strong>MOORE'S LAW IS SLOWING:</strong> Quantum computing offers exponential growth potential where classical computing plateaus</li>
+        <li><strong>CHALLENGES REMAIN:</strong> Decoherence, cryogenic requirements, and scaling to millions of qubits are major hurdles</li>
+        <li><strong>BUSINESS MODELS VARY:</strong> VW develops internal solutions; V-QUANTUM provides service using global platforms</li>
+        <li><strong>MARKET IS GROWING:</strong> $450-850B annual value projected by 2040</li>
+        <li><strong>PREPARE NOW:</strong> Start with QaaS, develop quantum skills, adopt post-quantum cryptography</li>
+        <li><strong>LONG-TERM VISION REQUIRED:</strong> Success comes from strategic partnerships, continuous learning, and patience</li>
+      </ul>
+
+      <div style="background: rgba(255, 255, 255, 0.08); border: 2px solid rgba(255, 255, 255, 0.4); padding: 50px; margin-top: 60px; text-align: center;">
+        <h3 style="font-size: 2.5em; margin-bottom: 20px;">THE QUANTUM FUTURE</h3>
+        <p style="font-size: 1.3em; line-height: 1.8; opacity: 0.9;">
+          We stand at the threshold of a new computing era.<br>
+          The question is not <em>if</em> quantum computing will transform business,<br>
+          but <strong>when</strong> - and <strong>who will be ready</strong>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Kahoot Section -->
+  <section class="kahoot-section">
+    <div class="chapter-number" style="opacity: 0.05;">11</div>
+    <h2 style="font-size: 3.5em; margin-bottom: 20px;">TEST YOUR KNOWLEDGE</h2>
+    <p style="font-size: 1.5em; opacity: 0.8; letter-spacing: 0.05em; margin-bottom: 40px;">JOIN OUR INTERACTIVE QUIZ</p>
+
+    <div class="kahoot-input-container">
+      <input
+              type="text"
+              id="kahootLink"
+              class="kahoot-input"
+              placeholder="Paste your Kahoot link here..."
+              value=""
+      >
+    </div>
+
+    <a href="#" id="kahootBtn" class="kahoot-btn" target="_blank">LAUNCH KAHOOT</a>
+
+    <p style="font-size: 1.1em; margin-top: 40px; opacity: 0.7; letter-spacing: 0.05em;">
+      THANK YOU FOR YOUR ATTENTION
+    </p>
+  </section>
+
+  <!-- Footer -->
+  <section style="min-height: 50vh; text-align: center; border: none;">
+    <div style="opacity: 0.5;">
+      <p style="font-size: 1.2em; letter-spacing: 0.1em;">QUANTUM COMPUTING IN BUSINESS</p>
+      <p style="font-size: 1em; margin-top: 20px; letter-spacing: 0.05em;">DIGITAL TECHNOLOGY IN BUSINESS COURSE</p>
+      <p style="font-size: 0.9em; margin-top: 40px; opacity: 0.7;">© 2025 - GROUP PRESENTATION</p>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  // Progress bar
+  window.addEventListener('scroll', function() {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (winScroll / height) * 100;
+    document.getElementById('progressBar').style.width = scrolled + '%';
+  });
+
+  // Kahoot link functionality
+  const kahootInput = document.getElementById('kahootLink');
+  const kahootBtn = document.getElementById('kahootBtn');
+
+  kahootInput.addEventListener('input', function() {
+    const link = kahootInput.value.trim();
+    if (link) {
+      kahootBtn.href = link;
+      kahootBtn.style.opacity = '1';
+    } else {
+      kahootBtn.href = '#';
+      kahootBtn.style.opacity = '0.5';
+    }
+  });
+
+  kahootBtn.addEventListener('click', function(e) {
+    if (!kahootInput.value.trim()) {
+      e.preventDefault();
+      alert('Please paste your Kahoot link first!');
+    }
+  });
+
+  // Smooth scroll for better experience
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  });
+
+  // Add fade-in animation on scroll
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -100px 0px'
+  };
+
+  const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll('.content-box, .card, .timeline-item').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
