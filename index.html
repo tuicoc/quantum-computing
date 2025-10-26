@@ -497,14 +497,26 @@
       .grid-2 {
         grid-template-columns: 1fr;
       }
-      .team {
-        grid-template-columns: 1fr;
-      }
+
       section {
         padding: 60px 20px;
       }
       .content-box {
         padding: 30px;
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .team {
+        grid-template-columns: 1fr !important;
+        max-width: 100% !important;
+      }
+      .team-member img {
+        width: 300px !important;
+        height: 300px !important;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
       }
     }
 
@@ -535,26 +547,28 @@
     <p style="font-size: 1.3em; margin-top: 30px; letter-spacing: 0.05em; opacity: 0.7;">FROM THEORY TO REAL-WORLD APPLICATIONS</p>
     <p style="font-size: 1.1em; margin-top: 40px; opacity: 0.6;">DIGITAL TECHNOLOGY IN BUSINESS COURSE</p>
 
-    <div class="team">
+    <div class="team" style="grid-template-columns: repeat(3, 1fr); justify-items: center;">
       <div class="team-member">
-        <p style="font-size: 1.1em;"><strong>MEMBER 1</strong></p>
-        <p style="opacity: 0.7; margin-top: 10px;">20%</p>
+        <img src="user1.png" alt="Member 1" style="width: 100%; height: 300px; object-fit: cover; margin-bottom: 15px;">
+        <p style="font-size: 1.1em;"><strong>Đào Thái Uyên</strong></p>
       </div>
       <div class="team-member">
-        <p style="font-size: 1.1em;"><strong>MEMBER 2</strong></p>
-        <p style="opacity: 0.7; margin-top: 10px;">20%</p>
+        <img src="user2.png" alt="Member 2" style="width: 100%; height: 300px; object-fit: cover; margin-bottom: 15px;">
+        <p style="font-size: 1.1em;"><strong>Nguyễn Thị Thùy Dung</strong></p>
       </div>
       <div class="team-member">
-        <p style="font-size: 1.1em;"><strong>MEMBER 3</strong></p>
-        <p style="opacity: 0.7; margin-top: 10px;">20%</p>
+        <img src="user3.png" alt="Member 3" style="width: 100%; height: 300px; object-fit: cover; margin-bottom: 15px;">
+        <p style="font-size: 1.1em;"><strong>Võ Thị Mộng Huyền</strong></p>
+      </div>
+    </div>
+    <div class="team" style="grid-template-columns: repeat(2, 1fr); justify-items: center; max-width: 66.67%; margin: 30px auto 0;">
+      <div class="team-member">
+        <img src="user4.png" alt="Member 4" style="width: 100%; height: 300px; object-fit: cover; margin-bottom: 15px;">
+        <p style="font-size: 1.1em;"><strong>Ngô Trần Quốc Huy</strong></p>
       </div>
       <div class="team-member">
-        <p style="font-size: 1.1em;"><strong>MEMBER 4</strong></p>
-        <p style="opacity: 0.7; margin-top: 10px;">20%</p>
-      </div>
-      <div class="team-member">
-        <p style="font-size: 1.1em;"><strong>MEMBER 5</strong></p>
-        <p style="opacity: 0.7; margin-top: 10px;">20%</p>
+        <img src="user5.png" alt="Member 5" style="width: 100%; height: 300px; object-fit: cover; margin-bottom: 15px;">
+        <p style="font-size: 1.1em;"><strong>Trần Xuân Bách</strong></p>
       </div>
     </div>
   </section>
@@ -1043,38 +1057,44 @@
     </div>
   </section>
 
-  <!-- Kahoot Section -->
-  <section class="kahoot-section">
-    <div class="chapter-number" style="opacity: 0.05;">11</div>
-    <h2 style="font-size: 3.5em; margin-bottom: 20px;">TEST YOUR KNOWLEDGE</h2>
-    <p style="font-size: 1.5em; opacity: 0.8; letter-spacing: 0.05em; margin-bottom: 40px;">JOIN OUR INTERACTIVE QUIZ</p>
+<!--  &lt;!&ndash; Kahoot Section &ndash;&gt;-->
+<!--  <section class="kahoot-section">-->
+<!--    <div class="chapter-number" style="opacity: 0.05;">11</div>-->
+<!--    <h2 style="font-size: 3.5em; margin-bottom: 20px;">TEST YOUR KNOWLEDGE</h2>-->
+<!--    <p style="font-size: 1.5em; opacity: 0.8; letter-spacing: 0.05em; margin-bottom: 40px;">JOIN OUR INTERACTIVE QUIZ</p>-->
 
-    <div class="kahoot-input-container">
-      <input
-              type="text"
-              id="kahootLink"
-              class="kahoot-input"
-              placeholder="Paste your Kahoot link here..."
-              value=""
-      >
-    </div>
+<!--    <div class="kahoot-input-container">-->
+<!--      <input-->
+<!--              type="text"-->
+<!--              id="kahootLink"-->
+<!--              class="kahoot-input"-->
+<!--              placeholder="Paste your Kahoot link here..."-->
+<!--              value=""-->
+<!--      >-->
+<!--    </div>-->
 
-    <a href="#" id="kahootBtn" class="kahoot-btn" target="_blank">LAUNCH KAHOOT</a>
+<!--    <a href="#" id="kahootBtn" class="kahoot-btn" target="_blank">LAUNCH KAHOOT</a>-->
 
-    <p style="font-size: 1.1em; margin-top: 40px; opacity: 0.7; letter-spacing: 0.05em;">
-      THANK YOU FOR YOUR ATTENTION
-    </p>
-  </section>
+<!--    <p style="font-size: 1.1em; margin-top: 40px; opacity: 0.7; letter-spacing: 0.05em;">-->
+<!--      THANK YOU FOR YOUR ATTENTION-->
+<!--    </p>-->
+<!--  </section>-->
 
+  <!-- Footer -->
   <!-- Footer -->
   <section style="min-height: 50vh; text-align: center; border: none;">
     <div style="opacity: 0.5;">
       <p style="font-size: 1.2em; letter-spacing: 0.1em;">QUANTUM COMPUTING IN BUSINESS</p>
       <p style="font-size: 1em; margin-top: 20px; letter-spacing: 0.05em;">DIGITAL TECHNOLOGY IN BUSINESS COURSE</p>
-      <p style="font-size: 0.9em; margin-top: 40px; opacity: 0.7;">© 2025 - GROUP PRESENTATION</p>
+      <p style="font-size: 0.9em; margin-top: 40px; opacity: 0.7;">© 2025 - GROUP 6</p>
+
+      <div style="margin-top: 60px; padding-top: 40px; border-top: 1px solid rgba(255, 255, 255, 0.2);">
+        <p style="font-size: 0.95em; letter-spacing: 0.05em; opacity: 0.8;">DEVELOPED BY</p>
+        <p style="font-size: 1.1em; margin-top: 10px; letter-spacing: 0.08em;"><strong>TRẦN XUÂN BÁCH</strong></p>
+        <p style="font-size: 0.9em; margin-top: 15px; opacity: 0.7;">For any issues, please contact: bach.tranxuan@hcmut.edu.vn</p>
+      </div>
     </div>
   </section>
-
 </div>
 
 <script>
